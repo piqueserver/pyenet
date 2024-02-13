@@ -13,8 +13,8 @@ source_files = ["enet.pyx"]
 _enet_files = glob.glob("enet/*.c")
 source_files.extend(_enet_files)
 
-lib_version = "1.3.14"
-package_version = lib_version # + '.post7'
+lib_version = "1.3.17"
+package_version = lib_version
 
 
 with open('README.rst') as f:
@@ -43,7 +43,7 @@ libraries = []
 
 if sys.platform == 'win32':
     define_macros.extend([('WIN32', None)])
-    libraries.extend(['enet64', 'Winmm', 'ws2_32'])
+    libraries.extend(['Winmm', 'ws2_32'])
 
 if sys.platform != 'darwin':
     define_macros.extend([('HAS_GETHOSTBYNAME_R', None),
@@ -52,7 +52,6 @@ if sys.platform != 'darwin':
 ext_modules = [
     Extension(
         "enet",
-        extra_compile_args=["-O3"],
         sources=source_files,
         include_dirs=["enet/include/"],
         define_macros=define_macros,

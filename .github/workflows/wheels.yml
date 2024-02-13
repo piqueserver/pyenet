@@ -1,0 +1,42 @@
+name: Wheel build
+
+on: [create, release, workflow_dispatch]
+
+jobs:
+  build_wheels:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Build
+        uses: pypa/cibuildwheel@v2.16.5
+        env:
+          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.8"
+          CIBW_BUILD_FRONTEND: "build"
+          CIBW_SKIP: "pp*"
+        with:
+          output-dir: wheelhouse
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v3
+        with:
+          name: python-wheel
+          path: ./wheelhouse/*.whl
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build sdist
+        run: pipx run build --sdist
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: dist/*.tar.gz
