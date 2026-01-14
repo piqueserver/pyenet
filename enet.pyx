@@ -317,7 +317,7 @@ cdef class Address:
         def __set__(self, value):
             self._enet_address.port = value
 
-cdef void __cdecl _packet_free_callback(ENetPacket* packet) with gil:
+cdef void __cdecl _packet_free_callback(ENetPacket* packet) noexcept with gil:
     cdef object func = <object>packet.userData
     func()
     # the packet is about to be destroyed, so decrease the refcount

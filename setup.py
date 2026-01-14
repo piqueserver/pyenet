@@ -71,6 +71,6 @@ setup(
     version=package_version,
     cmdclass={'build_ext': build_ext},
     ext_modules=ext_modules,
-    setup_requires=['Cython>=0,<1'],
-    install_requires=['Cython>=0,<1'],
+    setup_requires=['Cython>=3,<4'],
+    install_requires=['Cython>=3,<4'],
 )
