@@ -64,6 +64,7 @@ setup(
     # packages=['enet'],
     description='A python wrapper for the ENet library',
     long_description=long_description,
+    long_description_content_type='text/x-rst',
     url='https://github.com/piqueserver/pyenet/',
     maintainer='Andrew Resch, Piqueserver team',
     maintainer_email='samuel@swalladge.id.au',
