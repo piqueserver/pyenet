@@ -1,4 +1,4 @@
-include LICENSE ChangeLog README.rst
+include LICENSE ChangeLog README.rst pyproject.toml
 include enet.pyx
 
 include *.py
