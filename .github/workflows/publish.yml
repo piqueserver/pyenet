@@ -11,6 +11,11 @@ on:
         options:
           - testpypi
           - pypi
+      verbose:
+        description: 'Enable verbose output'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   build_wheels:
@@ -72,3 +77,4 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: ${{ inputs.target == 'testpypi' && 'https://test.pypi.org/legacy/' || 'https://upload.pypi.org/legacy/' }}
+          verbose: ${{ inputs.verbose }}
