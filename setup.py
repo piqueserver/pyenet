@@ -13,7 +13,7 @@ source_files = ["enet.pyx"]
 _enet_files = glob.glob("enet/*.c")
 source_files.extend(_enet_files)
 
-lib_version = "1.3.17"
+lib_version = "1.3.18"
 package_version = lib_version
 
 
