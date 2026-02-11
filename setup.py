@@ -13,7 +13,7 @@ source_files = ["enet.pyx"]
 _enet_files = glob.glob("enet/*.c")
 source_files.extend(_enet_files)
 
-lib_version = "1.3.17"
+lib_version = "1.3.18"
 package_version = lib_version
 
 
@@ -64,6 +64,7 @@ setup(
     # packages=['enet'],
     description='A python wrapper for the ENet library',
     long_description=long_description,
+    long_description_content_type='text/x-rst',
     url='https://github.com/piqueserver/pyenet/',
     maintainer='Andrew Resch, Piqueserver team',
     maintainer_email='samuel@swalladge.id.au',
