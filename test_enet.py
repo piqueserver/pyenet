@@ -14,7 +14,7 @@ class TestAddress(unittest.TestCase):
 
     def test_hostname(self):
         import socket
-        self.assertEqual(enet.Address(socket.gethostname(), 9999).hostname, socket.gethostname())
+        self.assertEqual(enet.Address(socket.gethostname(), 9999).hostname, socket.gethostname().lower())
         self.assertEqual(enet.Address(None, 9999).hostname, "*")
 
     def test_str(self):
