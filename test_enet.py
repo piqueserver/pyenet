@@ -1,3 +1,4 @@
+import os
 import unittest
 import enet
 
@@ -12,6 +13,7 @@ class TestAddress(unittest.TestCase):
         self.assertEqual(enet.Address("127.0.0.1", 9999).port, 9999)
         self.assertRaises(TypeError, enet.Address, "127.0.0.1", "foo")
 
+    @unittest.skipIf(os.environ.get("CI"), "reverse DNS unreliable on CI")
     def test_hostname(self):
         import socket
         self.assertEqual(enet.Address(socket.gethostname(), 9999).hostname, socket.gethostname().lower())
