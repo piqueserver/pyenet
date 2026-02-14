@@ -296,6 +296,8 @@ cdef class Address:
             if not value or value == "*":
                 self._enet_address.host = ENET_HOST_ANY
             else:
+                if isinstance(value, str):
+                    value = value.encode("ascii")
                 if enet_address_set_host(&self._enet_address, value):
                     raise IOError("Resolution failure!")
 
