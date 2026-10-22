@@ -1,7 +1,20 @@
 import atexit
 
+from os import strerror
+
 from cpython cimport bool
 from libc.stdint cimport uintptr_t
+from libc.errno cimport errno
+
+cdef _reset_errno():
+    global errno
+    errno = 0
+
+cdef _capture_errno():
+    if errno == 0:
+        return None
+
+    raise OSError(errno, strerror(errno))
 
 cdef extern from "Python.h":
     cdef void Py_INCREF(object o)
@@ -884,13 +897,19 @@ cdef class Host:
     def __init__ (self, Address address=None, peerCount=0, channelLimit=0,
         incomingBandwidth=0, outgoingBandwidth=0):
 
+        _reset_errno()
         if address:
             self._enet_host = enet_host_create(&address._enet_address, peerCount, channelLimit, incomingBandwidth, outgoingBandwidth)
         else:
             self._enet_host = enet_host_create(NULL, peerCount, channelLimit, incomingBandwidth, outgoingBandwidth)
 
         if not self._enet_host:
+            error = _capture_errno()
+            if error is not None:
+                raise error
+
             raise MemoryError("Unable to create host structure!")
+
         self.dealloc = True
 
         global host_static_instances
