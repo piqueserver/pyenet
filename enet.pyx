@@ -172,7 +172,7 @@ cdef extern from "enet/enet.h":
     void enet_host_bandwidth_limit(ENetHost *host, enet_uint32 incomingBandwidth, enet_uint32 outgoingBandwidth)
     void enet_host_flush(ENetHost *host)
     int enet_host_check_events(ENetHost *host, ENetEvent *event)
-    int enet_host_service(ENetHost *host, ENetEvent *event, enet_uint32 timeout)
+    int enet_host_service(ENetHost *host, ENetEvent *event, enet_uint32 timeout) nogil
 
     # Peer functions
     void enet_peer_throttle_configure(ENetPeer *peer, enet_uint32 interval, enet_uint32 acceleration, enet_uint32 deacceleration)
@@ -941,9 +941,9 @@ cdef class Host:
             else:
                 return event
 
-    def service(self, timeout, fast_drop=False):
+    def service(self, int timeout, bool fast_drop=False):
         """
-        Event service (int timeout)
+        Event service
 
         Waits for events on the host specified and shuttles packets between
         the host and its peers. The timeout is in milliseconds.
@@ -953,8 +953,10 @@ cdef class Host:
 
         if self._enet_host:
             event = Event()
-            result = enet_host_service(
-                self._enet_host, &(<Event> event)._enet_event, timeout)
+
+            with nogil:
+                result = enet_host_service(
+                    self._enet_host, &(<Event> event)._enet_event, timeout)
 
             if result < 0:
                 raise IOError("Servicing error - probably disconnected.")
@@ -1083,7 +1085,7 @@ cdef class Host:
             self._interceptCallback = value
 
 
-cdef int __cdecl intercept_callback(ENetHost *host, ENetEvent *event) except -1:
+cdef int __cdecl intercept_callback(ENetHost *host, ENetEvent *event) except -1 with gil:
     cdef Address address = Address(None, 0)
     address._enet_address = host.receivedAddress
     cdef object ret = None
