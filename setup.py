@@ -31,7 +31,6 @@ ext_modules = cythonize(
         define_macros=define_macros,
         libraries=libraries,
         library_dirs=["enet/"])],
-    compiler_directives={'language_level': 2},
 )
 
 setup(
